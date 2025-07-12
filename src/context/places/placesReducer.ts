@@ -15,7 +15,6 @@ export const placesReducer = (state: PlacesState, action: PlacesAction): PlacesS
                 userLocation: action.payload
             } 
 
-    
         default:
            return state;
     }

@@ -1,5 +1,5 @@
 import { useContext, useLayoutEffect, useRef } from "react"
-import { PlacesContext } from "../context/index"
+import { MapContext, PlacesContext } from "../context/index"
 import { Loading } from "./Loading";
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
@@ -7,6 +7,7 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 
 export const MapView = () => {
     const {isLoading, userLocation} = useContext(PlacesContext);
+    const { setMap }  = useContext(MapContext);
     const mapDiv = useRef<HTMLDivElement>(null);
 
    
@@ -17,7 +18,8 @@ export const MapView = () => {
                 style: 'https://demotiles.maplibre.org/style.json',
                 center: userLocation,
                 zoom: 1
-            })
+            });
+            setMap(map);
         }
     }, [isLoading])
 
