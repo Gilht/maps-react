@@ -10,12 +10,13 @@ export const MapView = () => {
     const { setMap }  = useContext(MapContext);
     const mapDiv = useRef<HTMLDivElement>(null);
 
+    const mapKEY = 'xwANgCfucb3swXtUQm8y';
    
     useLayoutEffect(() => {
         if(!isLoading) {
             const map = new maplibregl.Map({
                 container: mapDiv.current!,
-                style: 'https://demotiles.maplibre.org/style.json',
+                style: `https://api.maptiler.com/maps/topo/style.json?key=${mapKEY}`,
                 center: userLocation,
                 zoom: 1
             });
