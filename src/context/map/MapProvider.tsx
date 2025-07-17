@@ -5,6 +5,7 @@ import { MapContext } from './MapContext';
 import { mapReducer } from './mapReducer';
 import directionsApi from '../../apis/directionsApi';
 import { DirectionsResponse } from '../../interfaces/directions';
+import { number } from 'prop-types';
 
 interface Props {
     children: JSX.Element | JSX.Element[];
@@ -87,12 +88,30 @@ export const MapProvider = ({children}: Props) => {
 
             const { distance, duration, geometry } = response.data.routes[0];
 
+
+            const { coordinates: coords } = geometry;
+
             let kms = distance / 1000;
             kms = Math.round(kms * 100);
             kms /= 100;
 
             const minutes = Math.floor(duration/60);
             console.log(response)
+
+            const bounds = new maplibregl.LngLatBounds(
+                start,
+                start
+            );
+
+            for (const coord of coords) {
+                const newCoord: [number, number] = [ coord[0], coord[1]];
+
+                bounds.extend(newCoord);
+            }
+
+            state.map?.fitBounds(bounds, {
+                padding: 200
+            });
     }
 
 
