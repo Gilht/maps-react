@@ -91,6 +91,7 @@ export const MapProvider = ({children}: Props) => {
             kms = Math.round(kms * 100);
             kms /= 100;
 
+            const minutes = Math.floor(duration/60);
             console.log(response)
     }
 
