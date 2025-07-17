@@ -112,6 +112,44 @@ export const MapProvider = ({children}: Props) => {
             state.map?.fitBounds(bounds, {
                 padding: 200
             });
+
+            //Polyline
+            const routeGeoJson = {
+                type: 'Feature',
+                geometry: {
+                  type: 'LineString',
+                  coordinates: coords 
+                },
+                properties: {}
+              };
+
+              if (state.map?.getSource('route')) {
+                state.map.removeLayer('route-line');
+                state.map.removeSource('route');
+              }
+              
+              // Agrega la fuente con los datos de la ruta
+              state.map?.addSource('route', {
+                type: 'geojson',
+                data: routeGeoJson
+              });
+
+              if(state.map?.getLayer('route-line')) {
+                state.map.removeLayer('route-line');
+                state.map.removeSource('route-line');
+              }
+              
+              // Agrega la capa visual
+              state.map?.addLayer({
+                id: 'route-line',
+                type: 'line',
+                source: 'route',
+                paint: {
+                  'line-color': '#FF0000',
+                  'line-width': 4,
+                  'line-opacity': 0.9
+                }
+              });
     }
 
 
