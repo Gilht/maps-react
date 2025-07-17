@@ -1,11 +1,35 @@
-import { useContext } from "react"
-import { PlacesContext } from "../context/index";
+import { useContext, useState} from "react"
+import { MapContext, MapProvider, PlacesContext } from "../context/index";
+import { Feature } from "../interfaces/places";
 
 
 
 export const SearchResults = () => {
 
-    const { places, isLoadingPlaces } = useContext(PlacesContext);
+    const { places, isLoadingPlaces, userLocation } = useContext(PlacesContext);
+    const { map, getRouteBetweenPoints } = useContext(MapContext);
+
+    const [activeId, setActiveId] = useState<string>('');
+
+   
+
+    const onPlaceClicked = (place: Feature) => {
+
+        const [lng, lat] = place.center;
+        setActiveId(place.id);
+        map?.flyTo({
+            zoom: 6,
+            center: [lng, lat]
+        })
+    }
+
+    const getRoute = (place: Feature) => {
+        if(!userLocation) return;
+
+        const [lng, lat] = place.center;
+
+        getRouteBetweenPoints(userLocation, [lng, lat]);
+    }
 
     if(isLoadingPlaces) {
         return (
@@ -25,7 +49,9 @@ export const SearchResults = () => {
             {places.map(place => (
                   <li
                   key={place.id}
-                  className="list-group-item list-group-item-action">
+                  className={`list-group-item list-group-item-action pointer ${(activeId === place.id) ? 'active' : ''}`} 
+                  onClick={() => onPlaceClicked(place)}
+                  >
                   <h6>{place.text_es}</h6>
   
                   <p
@@ -35,9 +61,11 @@ export const SearchResults = () => {
                   }}
                   >{place.place_name}
                   </p>
-  
-                  <button className="btn btn-outline-primary">
-                      Direccioens
+                  
+                  <button className={`btn btn-sm ${activeId === place.id ? 'btn-outline-light' : 'btn-outline-primary'}`} 
+                  onClick={() => getRoute(place)}
+                  >
+                      Direcciones
                   </button>
               </li>
             ))}
