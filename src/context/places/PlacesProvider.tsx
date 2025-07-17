@@ -35,7 +35,11 @@ export const PlacesProvider = ({children}: Props) => {
     }, [])
 
     const searchPlacesByTerm = async (query: string)  => {
-        if(query.length === 0) return []
+        if(query.length === 0) {
+
+            dispatch({type: 'setPlaces', payload: []});
+            return [];
+        }
 
         dispatch({ type: 'setLoadingPlaces'});
 
