@@ -9,7 +9,7 @@ interface MapContextProps {
     //methods
     setMap: (map: maplibregl) => void;
     getRouteBetweenPoints: (start: [number, number], end: [number, number])
-     => any;
+     => Promise<void>;
 }
 
 export const MapContext = createContext({} as MapContextProps);

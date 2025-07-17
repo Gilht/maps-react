@@ -4,6 +4,7 @@ import { PlacesContext } from '../index';
 import { MapContext } from './MapContext';
 import { mapReducer } from './mapReducer';
 import directionsApi from '../../apis/directionsApi';
+import { DirectionsResponse } from '../../interfaces/directions';
 
 interface Props {
     children: JSX.Element | JSX.Element[];
@@ -75,7 +76,7 @@ export const MapProvider = ({children}: Props) => {
         end: [number, number]): any => {
 
 
-            const response = await directionsApi.get(`/driving/${start.join(',')};${end.join(',')}`, {
+            const response = await directionsApi.get<DirectionsResponse>(`/driving/${start.join(',')};${end.join(',')}`, {
                 params: {
                   overview: 'full',
                   geometries: 'geojson'
@@ -83,7 +84,14 @@ export const MapProvider = ({children}: Props) => {
               });
             
             //   return response.data.routes[0].geometry.coordinates;
-            console.log(response.)
+
+            const { distance, duration, geometry } = response.data.routes[0];
+
+            let kms = distance / 1000;
+            kms = Math.round(kms * 100);
+            kms /= 100;
+
+            console.log(response)
     }
 
 
